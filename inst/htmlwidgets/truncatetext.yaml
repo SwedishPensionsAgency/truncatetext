@@ -1,7 +1,8 @@
 # (uncomment to add a dependency)
-# dependencies:
-#  - name:
-#    version:
-#    src:
-#    script:
+dependencies:
+  - name: jquery
+    version: 1.11.3
+    src: htmlwidgets/lib/jquery-1.11.3
+    script:
+      - jquery.min.js
 #    stylesheet:
