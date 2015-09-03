@@ -14,12 +14,13 @@ HTMLWidgets.widget({
 
   renderValue: function(el, x, instance) {
 
-    el.innerText = x.message;
+    $container = $( "<div class='container'></div>" );
+    $container.html(x.message);
+    $( el ).append( $container );
 
   },
 
   resize: function(el, width, height, instance) {
-
   }
 
 });
