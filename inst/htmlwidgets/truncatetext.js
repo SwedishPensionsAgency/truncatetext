@@ -35,6 +35,21 @@ HTMLWidgets.widget({
         return height;
         }
 
+        var toggleReadMore = function ( more ){
+          if ( more ) {
+            return function(){
+              $container.parent().find( ".ttxt-more" ).removeClass( "ttxt-nodisplay" );
+              $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
+            }
+          } else {
+            return function(){
+              $container.parent().find( ".ttxt-more" ).addClass( "ttxt-nodisplay" );
+              $container.parent().find( ".ttxt-less" ).removeClass( "ttxt-nodisplay" );
+            }
+          }
+
+        }
+
 
         var $element = $container.find( ".ttxt-text" ),
             marginTop = parseInt( $element.children().css( "margin-top" ) ) || 0,
@@ -45,10 +60,11 @@ HTMLWidgets.widget({
 
 
         if ($element.height() > ( lineHeight * maxLines + marginTop + marginBottom + paddingTop + paddingBottom )) {
+          $element.css( "padding-bottom" , 0);
             $element.animate({
                 "max-height": ( lineHeight * maxLines + marginTop + paddingTop ) + "px"
-            }, duration);
-            $element.css( "padding-bottom" , 0);
+            }, duration, toggleReadMore(true));
+
 
             $container.find( ".ttxt-fade-out" ).css( "width", 2 * lineHeight * maxLines + "px" );
             $container.find( ".ttxt-fade-out" ).css( "height", lineHeight + "px" );
@@ -56,7 +72,7 @@ HTMLWidgets.widget({
         } else {
             $element.animate({
                 "max-height": $element[ 0 ].scrollHeight
-            }, duration);
+            }, duration, toggleReadMore());
             $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
         }
         return $container;
@@ -81,8 +97,7 @@ HTMLWidgets.widget({
     $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  x.lines, 0 );
 
     $container.siblings( ".ttxt-read-more" ).on( "click.truncatetext", function ( event ) {
-                $(this).find( ".ttxt-more" ).toggleClass( "ttxt-nodisplay" );
-                $(this).find( ".ttxt-less" ).toggleClass( "ttxt-nodisplay" );
+
                 instance.toggleMaxHeight( $( this ).siblings( ".ttxt-container" ), x.lines, x.duration );
             });
 
