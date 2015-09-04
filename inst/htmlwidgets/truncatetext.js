@@ -1,54 +1,54 @@
 HTMLWidgets.widget({
 
-  name: 'truncatetext',
+    name: 'truncatetext',
 
-  type: 'output',
+    type: 'output',
 
-  initialize: function(el, width, height) {
+    initialize: function( el, width, height ) {
 
-    $skeleton = $( "<div class='ttxt-container'>" +
-                     "<div class='ttxt-text'></div>" +
-                     "<div class='ttxt-fade-out'></div>" +
-                   "</div>" +
-                   "<div class='ttxt-read-more'><span class='ttxt-more'>Show more</span><span class='ttxt-less ttxt-nodisplay'>Show less</span></div>" );
-    $( el ).append( $skeleton );
-    return {
-      toggleMaxHeight: this.toggleMaxHeight
-    }
+        $skeleton = $( "<div class='ttxt-container'>" +
+            "<div class='ttxt-text'></div>" +
+            "<div class='ttxt-fade-out'></div>" +
+            "</div>" +
+            "<div class='ttxt-read-more'><span class='ttxt-more'>Show more</span><span class='ttxt-less ttxt-nodisplay'>Show less</span></div>" );
+        $( el ).append( $skeleton );
+        return {
+            toggleMaxHeight: this.toggleMaxHeight
+        }
 
-  },
+    },
 
 
 
-  toggleMaxHeight: function  ( $container, maxLines, duration ) {
+    toggleMaxHeight: function  ( $container, maxLines, duration ) {
 
         var lineHeightFunc = function ( $element ) {
-        var $tmp = $( "<div>test</div>" );
-        $element.append( $tmp );
-        $tmp.css({
-            "padding": "0",
+            var $tmp = $( "<div>test</div>" );
+            $element.append( $tmp );
+            $tmp.css({
+                "padding": "0",
                 "margin": "0",
                 "border": "0"
-        });
-        var height = $tmp[ 0 ].clientHeight;
-        $tmp.remove();
-        return height;
-        }
+            });
+            var height = $tmp[ 0 ].clientHeight;
+            $tmp.remove();
+            return height;
+        };
 
         var toggleReadMore = function ( more ){
-          if ( more ) {
-            return function(){
-              $container.parent().find( ".ttxt-more" ).removeClass( "ttxt-nodisplay" );
-              $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
+            if ( more ) {
+                return function(){
+                    $container.parent().find( ".ttxt-more" ).removeClass( "ttxt-nodisplay" );
+                    $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
+                }
+            } else {
+                return function(){
+                    $container.parent().find( ".ttxt-more" ).addClass( "ttxt-nodisplay" );
+                    $container.parent().find( ".ttxt-less" ).removeClass( "ttxt-nodisplay" );
+                }
             }
-          } else {
-            return function(){
-              $container.parent().find( ".ttxt-more" ).addClass( "ttxt-nodisplay" );
-              $container.parent().find( ".ttxt-less" ).removeClass( "ttxt-nodisplay" );
-            }
-          }
 
-        }
+        };
 
 
         var $element = $container.find( ".ttxt-text" ),
@@ -60,7 +60,7 @@ HTMLWidgets.widget({
 
 
         if ($element.height() > ( lineHeight * maxLines + marginTop + marginBottom + paddingTop + paddingBottom )) {
-          $element.css( "padding-bottom" , 0);
+            $element.css( "padding-bottom" , 0);
             $element.animate({
                 "max-height": ( lineHeight * maxLines + marginTop + paddingTop ) + "px"
             }, duration, toggleReadMore(true));
@@ -78,49 +78,49 @@ HTMLWidgets.widget({
         return $container;
     },
 
-  renderValue: function (el, x, instance) {
+    renderValue: function (el, x, instance) {
 
-    $( el ).find( ".ttxt-text" ).html( x.text );
-    if ( x.more ) {
-      $( el ).find( ".ttxt-read-more .ttxt-more" ).html( x.more );
+        $( el ).find( ".ttxt-text" ).html( x.text );
+        if ( x.more ) {
+            $( el ).find( ".ttxt-read-more .ttxt-more" ).html( x.more );
+        }
+
+        if ( x.less ) {
+            $( el ).find( ".ttxt-read-more .ttxt-less" ).html( x.less );
+        }
+
+        x.lines = x.lines !== undefined ? x.lines : 2;
+        x.duration = x.duration !== undefined ? x.duration : 400;
+
+        instance.x = x;
+
+        $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  x.lines, 0 );
+
+        $container.siblings( ".ttxt-read-more" ).on( "click.truncatetext", function ( event ) {
+
+            instance.toggleMaxHeight( $( this ).siblings( ".ttxt-container" ), x.lines, x.duration );
+        });
+
+        this.updateControls( $container );
+
+    },
+
+    updateControls: function ( $container, resize ) {
+        var scrollHeight = $container.find( ".ttxt-text" )[ 0 ].scrollHeight;
+
+        if ($container.find( ".ttxt-text" )[ 0 ].clientHeight >= scrollHeight) {
+            $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
+            $container.siblings( ".ttxt-read-more" ).addClass( "ttxt-nodisplay" );
+        } else if (resize) {
+            $container.find( ".ttxt-fade-out" ).removeClass( "ttxt-nodisplay" );
+            $container.siblings( ".ttxt-read-more" ).removeClass( "ttxt-nodisplay" );
+        }
+    },
+
+    resize: function( el, width, height, instance ) {
+        $( el ).find( ".ttxt-container .ttxt-text" ).css( "max-height", "" );
+        $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  instance.x.lines, 0 );
+        this.updateControls( $container, true );
     }
-
-    if ( x.less ) {
-      $( el ).find( ".ttxt-read-more .ttxt-less" ).html( x.less );
-    }
-
-    x.lines = x.lines !== undefined ? x.lines : 2;
-    x.duration = x.duration !== undefined ? x.duration : 400;
-
-    instance.x = x;
-
-    $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  x.lines, 0 );
-
-    $container.siblings( ".ttxt-read-more" ).on( "click.truncatetext", function ( event ) {
-
-                instance.toggleMaxHeight( $( this ).siblings( ".ttxt-container" ), x.lines, x.duration );
-            });
-
-    this.updateControls( $container );
-
-  },
-
-  updateControls: function ( $container, resize ) {
-    var scrollHeight = $container.find( ".ttxt-text" )[ 0 ].scrollHeight;
-
-    if ($container.find( ".ttxt-text" )[ 0 ].clientHeight >= scrollHeight) {
-        $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
-        $container.siblings( ".ttxt-read-more" ).addClass( "ttxt-nodisplay" );
-    } else if (resize) {
-        $container.find( ".ttxt-fade-out" ).removeClass( "ttxt-nodisplay" );
-        $container.siblings( ".ttxt-read-more" ).removeClass( "ttxt-nodisplay" );
-    }
-  },
-
-  resize: function(el, width, height, instance) {
-    $( el ).find( ".ttxt-container .ttxt-text" ).css( "max-height", "" );
-    $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  instance.x.lines, 0 );
-    this.updateControls( $container, true );
-  }
 
 });
