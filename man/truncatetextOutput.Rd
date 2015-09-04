@@ -4,7 +4,7 @@
 \alias{truncatetextOutput}
 \title{Widget output function for use in Shiny}
 \usage{
-truncatetextOutput(outputId, width = "100\%", height = "400px")
+truncatetextOutput(outputId, width = "100\%", height = "auto")
 }
 \description{
 Widget output function for use in Shiny

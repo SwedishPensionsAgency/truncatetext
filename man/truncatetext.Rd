@@ -4,8 +4,8 @@
 \alias{truncatetext}
 \title{Truncated Text}
 \usage{
-truncatetext(text, lines = 2, duration = 400, more = "Visa hela texten",
-  less = "Dölj texten", width = "auto", height = "auto")
+truncatetext(text, lines = 2, duration = 400, more = NULL, less = NULL,
+  width = "100\%", height = "auto")
 }
 \arguments{
 \item{text}{text inside the box}
