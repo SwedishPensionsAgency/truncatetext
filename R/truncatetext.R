@@ -11,7 +11,7 @@
 #' @import htmlwidgets
 #'
 #' @export
-truncatetext <- function(text, lines = 2, duration = 400, more = "Visa hela texten", less = "Dölj texten", width = "auto", height = "auto"){
+truncatetext <- function(text, lines = 2, duration = 400, more = NULL, less = NULL, width = "100%", height = "auto"){
 
   # forward options using x
   x = list(
@@ -35,7 +35,7 @@ truncatetext <- function(text, lines = 2, duration = 400, more = "Visa hela text
 #' Widget output function for use in Shiny
 #'
 #' @export
-truncatetextOutput <- function(outputId, width = '100%', height = '400px'){
+truncatetextOutput <- function(outputId, width = '100%', height = 'auto'){
   shinyWidgetOutput(outputId, 'truncatetext', width, height, package = 'truncatetext')
 }
 
