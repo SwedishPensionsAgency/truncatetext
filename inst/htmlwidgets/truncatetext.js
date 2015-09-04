@@ -6,11 +6,11 @@ HTMLWidgets.widget({
 
   initialize: function(el, width, height) {
 
-    $skeleton = $( "<div class='container'>" +
-                     "<div class='text'></div>" +
-                     "<div class='fade-out'></div>" +
+    $skeleton = $( "<div class='ttxt-container'>" +
+                     "<div class='ttxt-text'></div>" +
+                     "<div class='ttxt-fade-out'></div>" +
                    "</div>" +
-                   "<div class='read-more'><span class='more'>Read more</span><span class='less nodisplay'>Colappse</span></div>" );
+                   "<div class='ttxt-read-more'><span class='ttxt-more'>Read more</span><span class='ttxt-less ttxt-nodisplay'>Colappse</span></div>" );
     $( el ).append( $skeleton );
     return {
       toggleMaxHeight: this.toggleMaxHeight
@@ -35,38 +35,43 @@ HTMLWidgets.widget({
         return height;
         }
 
-        var $element = $container.find( ".text" ),
+
+        var $element = $container.find( ".ttxt-text" ),
+            marginTop = parseInt( $element.children().css( "margin-top" ) ) || 0,
+            marginBottom = parseInt( $element.children().css( "margin-bottom" ) ) || 0,
+            paddingTop = parseInt( $element.children().css( "padding-top" ) ) || 0,
+            paddingBottom = parseInt( $element.children().css( "padding-bottom" ) ) || 0,
             lineHeight = parseInt( lineHeightFunc( $element ) );
 
         height = height !== undefined ? height : "auto";
 
-        if ($element.height() > (lineHeight * maxLines)) {
+        if ($element.height() > ( lineHeight * maxLines + marginTop + marginBottom + paddingTop + paddingBottom )) {
             $element.animate({
-                "max-height": (lineHeight * maxLines) + "px"
+                "max-height": ( lineHeight * maxLines + marginTop + paddingTop ) + "px"
             }, duration);
             $element.css( "padding-bottom" , 0);
 
-            $container.find( ".fade-out" ).css( "width", 2 * lineHeight * maxLines + "px" );
-            $container.find( ".fade-out" ).css( "height", lineHeight + "px" );
-            $container.find( ".fade-out" ).removeClass( "nodisplay" );
+            $container.find( ".ttxt-fade-out" ).css( "width", 2 * lineHeight * maxLines + "px" );
+            $container.find( ".ttxt-fade-out" ).css( "height", lineHeight + "px" );
+            $container.find( ".ttxt-fade-out" ).removeClass( "ttxt-nodisplay" );
         } else {
             $element.animate({
                 "max-height": typeof height === "number" ? height + "px" : height
             }, duration);
-            $container.find( ".fade-out" ).addClass( "nodisplay" );
+            $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
         }
         return $container;
     },
 
   renderValue: function (el, x, instance) {
 
-    $( el ).find( ".text" ).html( x.text );
+    $( el ).find( ".ttxt-text" ).html( x.text );
     if ( x.more ) {
-      $( el ).find( ".read-more .more" ).html( x.more );
+      $( el ).find( ".ttxt-read-more .ttxt-more" ).html( x.more );
     }
 
     if ( x.less ) {
-      $( el ).find( ".read-more .less" ).html( x.less );
+      $( el ).find( ".ttxt-read-more .ttxt-less" ).html( x.less );
     }
 
     x.lines = x.lines !== undefined ? x.lines : 2;
@@ -74,14 +79,14 @@ HTMLWidgets.widget({
 
     instance.x = x;
 
-    $container = instance.toggleMaxHeight( $( el ).find( ".container" ),  x.lines, 0 );
+    $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  x.lines, 0 );
 
-var scrollHeight = $container.find( ".text" )[ 0 ].scrollHeight;
+var scrollHeight = $container.find( ".ttxt-text" )[ 0 ].scrollHeight;
 
-    $container.siblings( ".read-more" ).on( "click.pmstat", function ( event ) {
-                $(this).find( ".more" ).toggleClass( "nodisplay" );
-                $(this).find( ".less" ).toggleClass( "nodisplay" );
-                instance.toggleMaxHeight( $( this ).siblings( ".container" ), x.lines, x.duration, scrollHeight );
+    $container.siblings( ".ttxt-read-more" ).on( "click.pmstat", function ( event ) {
+                $(this).find( ".ttxt-more" ).toggleClass( "ttxt-nodisplay" );
+                $(this).find( ".ttxt-less" ).toggleClass( "ttxt-nodisplay" );
+                instance.toggleMaxHeight( $( this ).siblings( ".ttxt-container" ), x.lines, x.duration, scrollHeight );
             });
 
     this.updateControls( $container );
@@ -89,20 +94,20 @@ var scrollHeight = $container.find( ".text" )[ 0 ].scrollHeight;
   },
 
   updateControls: function ( $container, resize ) {
-    var scrollHeight = $container.find( ".text" )[ 0 ].scrollHeight;
+    var scrollHeight = $container.find( ".ttxt-text" )[ 0 ].scrollHeight;
 
-    if ($container.find( ".text" )[ 0 ].clientHeight >= scrollHeight) {
-        $container.find( ".fade-out" ).addClass( "nodisplay" );
-        $container.siblings( ".read-more" ).addClass( "nodisplay" );
+    if ($container.find( ".ttxt-text" )[ 0 ].clientHeight >= scrollHeight) {
+        $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
+        $container.siblings( ".ttxt-read-more" ).addClass( "ttxt-nodisplay" );
     } else if (resize) {
-        $container.find( ".fade-out" ).removeClass( "nodisplay" );
-        $container.siblings( ".read-more" ).removeClass( "nodisplay" );
+        $container.find( ".ttxt-fade-out" ).removeClass( "ttxt-nodisplay" );
+        $container.siblings( ".ttxt-read-more" ).removeClass( "ttxt-nodisplay" );
     }
   },
 
   resize: function(el, width, height, instance) {
-    $( el ).find( ".container .text" ).css( "max-height", "" );
-    $container = instance.toggleMaxHeight( $( el ).find( ".container" ),  instance.x.lines, 0 );
+    $( el ).find( ".ttxt-container .ttxt-text" ).css( "max-height", "" );
+    $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  instance.x.lines, 0 );
     this.updateControls( $container, true );
   }
 

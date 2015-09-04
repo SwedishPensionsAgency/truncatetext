@@ -1,18 +1,18 @@
-.container {
+.ttxt-container {
   position: relative;
 }
-.container .text {
+.ttxt-container .ttxt-text {
   overflow-y: hidden;
 }
-.read-more {
+.ttxt-read-more {
   color: red;
   cursor: pointer;
   text-align: center;
 }
-.nodisplay {
+.ttxt-nodisplay {
   display: none;
 }
-.fade-out {
+.ttxt-fade-out {
   width: 50px;
   height: 28px;
   position: absolute;
