@@ -5,4 +5,7 @@ dependencies:
     src: htmlwidgets/lib/jquery-1.11.3
     script:
       - jquery.min.js
-#    stylesheet:
+  - name: truncatetext
+    version: 0.1
+    src: htmlwidgets
+    stylesheet: truncatetext.css

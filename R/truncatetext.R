@@ -1,15 +1,25 @@
-#' <Add Title>
+#' Truncated Text
 #'
-#' <Add Description>
+#' Makes a truncatable text element.
+#'
+#' @param text text inside the box
+#' @param lines lines to show
+#' @param duration determining how long the animation will run, in milliseconds
+#' @param more label for the more button
+#' @param less label for the less button
 #'
 #' @import htmlwidgets
 #'
 #' @export
-truncatetext <- function(message, width = NULL, height = NULL) {
+truncatetext <- function(text, lines = 2, duration = 400, more = "Visa hela texten", less = "Dölj texten", width = "auto", height = "auto"){
 
   # forward options using x
   x = list(
-    message = message
+    text = text,
+    lines = lines,
+    duration = duration,
+    more = more,
+    less = less
   )
 
   # create widget
