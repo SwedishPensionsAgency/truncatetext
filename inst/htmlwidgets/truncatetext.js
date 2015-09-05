@@ -35,22 +35,6 @@ HTMLWidgets.widget({
             return height;
         };
 
-        var toggleReadMore = function ( more ){
-            if ( more ) {
-                return function(){
-                    $container.parent().find( ".ttxt-more" ).removeClass( "ttxt-nodisplay" );
-                    $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
-                }
-            } else {
-                return function(){
-                    $container.parent().find( ".ttxt-more" ).addClass( "ttxt-nodisplay" );
-                    $container.parent().find( ".ttxt-less" ).removeClass( "ttxt-nodisplay" );
-                }
-            }
-
-        };
-
-
         var $element = $container.find( ".ttxt-text" ),
             marginTop = parseInt( $element.children().css( "margin-top" ) ) || 0,
             marginBottom = parseInt( $element.children().css( "margin-bottom" ) ) || 0,
@@ -63,16 +47,23 @@ HTMLWidgets.widget({
             $element.css( "padding-bottom" , 0);
             $element.animate({
                 "max-height": ( lineHeight * maxLines + marginTop + paddingTop ) + "px"
-            }, duration, toggleReadMore(true));
-
+            }, duration, function(){
+              $container.parent().find( ".ttxt-more" ).removeClass( "ttxt-nodisplay" );
+              $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
+            });
 
             $container.find( ".ttxt-fade-out" ).css( "width", 2 * lineHeight * maxLines + "px" );
             $container.find( ".ttxt-fade-out" ).css( "height", lineHeight + "px" );
             $container.find( ".ttxt-fade-out" ).removeClass( "ttxt-nodisplay" );
+
         } else {
             $element.animate({
                 "max-height": $element[ 0 ].scrollHeight
-            }, duration, toggleReadMore());
+            }, duration, function(){
+              $container.parent().find( ".ttxt-more" ).addClass( "ttxt-nodisplay" );
+              $container.parent().find( ".ttxt-less" ).removeClass( "ttxt-nodisplay" );
+            });
+
             $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
         }
         return $container;
