@@ -52,7 +52,7 @@ HTMLWidgets.widget({
               $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
             });
 
-            $container.find( ".ttxt-fade-out" ).css( "width", 2 * lineHeight * maxLines + "px" );
+            $container.find( ".ttxt-fade-out" ).css( "width", Math.min( 2 * lineHeight * maxLines, $element.width() ) + "px" );
             $container.find( ".ttxt-fade-out" ).css( "height", lineHeight + "px" );
             $container.find( ".ttxt-fade-out" ).removeClass( "ttxt-nodisplay" );
 
