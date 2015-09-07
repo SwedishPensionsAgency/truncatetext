@@ -13,40 +13,40 @@ HTMLWidgets.widget({
             "<div class='ttxt-read-more'><span class='ttxt-more'>Show more</span><span class='ttxt-less ttxt-nodisplay'>Show less</span></div>" );
         $( el ).append( $skeleton );
         return {
-            toggleMaxHeight: this.toggleMaxHeight
+            toggleMaxHeight: this.toggleMaxHeight,
+            lineHeightFunc: this.lineHeightFunc
         }
 
     },
 
 
+    lineHeightFunc: function ( $element ) {
+        var $tmp = $( "<div>test</div>" );
+        $element.append( $tmp );
+        $tmp.css({
+            "padding": "0",
+            "margin": "0",
+            "border": "0"
+        });
+        var height = $tmp[ 0 ].clientHeight;
+        $tmp.remove();
+        return parseInt( height );
+    },
 
-    toggleMaxHeight: function  ( $container, maxLines, duration ) {
-
-        var lineHeightFunc = function ( $element ) {
-            var $tmp = $( "<div>test</div>" );
-            $element.append( $tmp );
-            $tmp.css({
-                "padding": "0",
-                "margin": "0",
-                "border": "0"
-            });
-            var height = $tmp[ 0 ].clientHeight;
-            $tmp.remove();
-            return height;
-        };
+    toggleMaxHeight: function  ( instance, $container, maxLines, duration ) {
 
         var $element = $container.find( ".ttxt-text" ),
             marginTop = parseInt( $element.children().css( "margin-top" ) ) || 0,
             marginBottom = parseInt( $element.children().css( "margin-bottom" ) ) || 0,
             paddingTop = parseInt( $element.children().css( "padding-top" ) ) || 0,
             paddingBottom = parseInt( $element.children().css( "padding-bottom" ) ) || 0,
-            lineHeight = parseInt( lineHeightFunc( $element ) );
+            lineHeight = instance.lineHeightFunc( $element );
 
 
-        if ($element.height() > ( lineHeight * maxLines + marginTop + marginBottom + paddingTop + paddingBottom )) {
+        if ( $element[ 0 ].clientHeight > ( lineHeight * maxLines + marginTop + marginBottom + paddingTop + paddingBottom + lineHeight / 2 ) ) { // add lineHeight / 2 to fix behaviour for small and large zooming
             $element.css( "padding-bottom" , 0);
             $element.animate({
-                "max-height": ( lineHeight * maxLines + marginTop + paddingTop ) + "px"
+                "max-height": ( lineHeight * maxLines + marginTop + paddingTop + 1 ) + "px" // 1 to show the descender in large zooming
             }, duration, function(){
               $container.parent().find( ".ttxt-more" ).removeClass( "ttxt-nodisplay" );
               $container.parent().find( ".ttxt-less" ).addClass( "ttxt-nodisplay" );
@@ -85,21 +85,22 @@ HTMLWidgets.widget({
 
         instance.x = x;
 
-        $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  x.lines, 0 );
+        $container = instance.toggleMaxHeight( instance, $( el ).find( ".ttxt-container" ),  x.lines, 0 );
 
         $container.siblings( ".ttxt-read-more" ).on( "click.truncatetext", function ( event ) {
 
-            instance.toggleMaxHeight( $( this ).siblings( ".ttxt-container" ), x.lines, x.duration );
+            instance.toggleMaxHeight( instance, $( this ).siblings( ".ttxt-container" ), x.lines, x.duration );
         });
 
-        this.updateControls( $container );
+        this.updateControls( instance, $container );
 
     },
 
-    updateControls: function ( $container, resize ) {
-        var scrollHeight = $container.find( ".ttxt-text" )[ 0 ].scrollHeight;
+    updateControls: function ( instance, $container, resize ) {
+        var scrollHeight = $container.find( ".ttxt-text" )[ 0 ].scrollHeight,
+            lineHeight = instance.lineHeightFunc( $container.find( ".ttxt-text" ) );
 
-        if ($container.find( ".ttxt-text" )[ 0 ].clientHeight >= scrollHeight) {
+        if ($container.find( ".ttxt-text" )[ 0 ].clientHeight + lineHeight / 2 >= scrollHeight) { // add lineHeight / 2 to fix small and large zooming
             $container.find( ".ttxt-fade-out" ).addClass( "ttxt-nodisplay" );
             $container.siblings( ".ttxt-read-more" ).addClass( "ttxt-nodisplay" );
         } else if (resize) {
@@ -110,8 +111,8 @@ HTMLWidgets.widget({
 
     resize: function( el, width, height, instance ) {
         $( el ).find( ".ttxt-container .ttxt-text" ).css( "max-height", "" );
-        $container = instance.toggleMaxHeight( $( el ).find( ".ttxt-container" ),  instance.x.lines, 0 );
-        this.updateControls( $container, true );
+        $container = instance.toggleMaxHeight( instance, $( el ).find( ".ttxt-container" ),  instance.x.lines, 0 );
+        this.updateControls( instance, $container, true );
     }
 
 });
