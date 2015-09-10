@@ -1,10 +1,10 @@
 Package: truncatetext
-Title: What the Package Does (one line, title case)
+Title: Truncate Text and Make it Expandable
 Version: 0.1
 Authors@R: person("Cédric", "Perriard", email = "c@perriard.se", role =
     c("aut", "cre"))
-Description: What the package does (one paragraph)
+Description: Htmlwidget for Shiny to show only some lines of a text, that could be expanded
 Depends:
     R (>= 3.1.1)
-License: What license is it under?
+License: MIT | file LICENSE
 LazyData: true
