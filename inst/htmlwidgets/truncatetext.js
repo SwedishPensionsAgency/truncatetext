@@ -73,11 +73,11 @@ HTMLWidgets.widget({
 
         $( el ).find( ".ttxt-text" ).html( x.text );
         if ( x.more ) {
-            $( el ).find( ".ttxt-read-more .ttxt-more" ).html( x.more );
+            $( el ).find( ".ttxt-read-more .ttxt-more a" ).html( x.more );
         }
 
         if ( x.less ) {
-            $( el ).find( ".ttxt-read-more .ttxt-less" ).html( x.less );
+            $( el ).find( ".ttxt-read-more .ttxt-less a" ).html( x.less );
         }
 
         x.lines = x.lines !== undefined ? x.lines : 2;
