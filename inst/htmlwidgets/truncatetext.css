@@ -5,8 +5,6 @@
   overflow-y: hidden;
 }
 .ttxt-read-more {
-  color: red;
-  cursor: pointer;
   text-align: center;
 }
 .ttxt-nodisplay {

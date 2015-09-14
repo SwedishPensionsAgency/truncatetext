@@ -10,7 +10,7 @@ HTMLWidgets.widget({
             "<div class='ttxt-text'></div>" +
             "<div class='ttxt-fade-out'></div>" +
             "</div>" +
-            "<div class='ttxt-read-more'><span class='ttxt-more'>Show more</span><span class='ttxt-less ttxt-nodisplay'>Show less</span></div>" );
+            "<div class='ttxt-read-more'><span class='ttxt-more'><a href='#'>Show more</a></span><span class='ttxt-less ttxt-nodisplay'><a href='#'>Show less</a></span></div>" );
         $( el ).append( $skeleton );
         return {
             toggleMaxHeight: this.toggleMaxHeight,
