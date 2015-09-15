@@ -71,6 +71,9 @@ HTMLWidgets.widget({
 
     renderValue: function (el, x, instance) {
 
+        if ( x.class ) {
+          $( el ).addClass( x.class );
+        }
         $( el ).find( ".ttxt-text" ).html( x.text );
         if ( x.more ) {
             $( el ).find( ".ttxt-read-more .ttxt-more a" ).html( x.more );

@@ -7,11 +7,14 @@
 #' @param duration determining how long the animation will run, in milliseconds
 #' @param more label for the more button
 #' @param less label for the less button
+#' @param width width of the widget container
+#' @param height height of the widget container
+#' @param class class to add to the widget container
 #'
 #' @import htmlwidgets
 #'
 #' @export
-truncatetext <- function(text, lines = 2, duration = 400, more = NULL, less = NULL, width = "100%", height = "auto"){
+truncatetext <- function(text, lines = 2, duration = 400, more = NULL, less = NULL, width = "100%", height = "auto", class = NULL){
 
   # forward options using x
   x = list(
@@ -19,7 +22,8 @@ truncatetext <- function(text, lines = 2, duration = 400, more = NULL, less = NU
     lines = lines,
     duration = duration,
     more = more,
-    less = less
+    less = less,
+    class = class
   )
 
   # create widget
