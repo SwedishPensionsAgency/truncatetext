@@ -18,12 +18,12 @@ truncatetext <- function(text, lines = 2, duration = 400, more = NULL, less = NU
 
   # forward options using x
   x = list(
-    text = text,
+    text = as.character(text),
     lines = lines,
     duration = duration,
-    more = more,
-    less = less,
-    class = class
+    more = as.character(more),
+    less = as.character(less),
+    class = as.character(class)
   )
 
   # create widget
